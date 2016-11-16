@@ -5,42 +5,36 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.jongo.Jongo;
+import org.jongo.MongoCollection;
+
 import com.examples.school.Database;
 import com.examples.school.Student;
-import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 public class MongoDatabaseWrapper implements Database {
 
-	private DBCollection students;
+	private MongoCollection students;
 
 	public MongoDatabaseWrapper(MongoClient mc) throws UnknownHostException {
 		DB db = mc.getDB("school");
 
-		students = db.getCollection("student");
+		Jongo jongo = new Jongo(db);
+		students = jongo.getCollection("student");
 	}
 
 	@Override
 	public List<Student> getAllStudentsList() {
-		DBCursor cursor = students.find();
+		Iterable<Student> iterable = students.find().as(Student.class);
 		return StreamSupport.
-				stream(cursor.spliterator(), false).
-				map(e -> new Student((String) e.get("id"), (String) e.get("name"))).
-				collect(Collectors.toList());
+			stream(iterable.spliterator(), false).
+			collect(Collectors.toList());
 	}
 
 	@Override
 	public Student findStudentById(String id) {
-		BasicDBObject searchQuery = new BasicDBObject();
-		searchQuery.put("id", id);
-		DBObject findOne = students.findOne(searchQuery);
-		return findOne != null ?
-				new Student((String) findOne.get("id"), (String) findOne.get("name")) :
-				null;
+		return students.findOne("{id: #}", id).as(Student.class);
 	}
 
 }

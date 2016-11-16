@@ -35,6 +35,11 @@
       <version>${mongo.driver.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.jongo</groupId>
+      <artifactId>jongo</artifactId>
+      <version>${jongo.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.github.fakemongo</groupId>
       <artifactId>fongo</artifactId>
       <version>1.6.5</version>
