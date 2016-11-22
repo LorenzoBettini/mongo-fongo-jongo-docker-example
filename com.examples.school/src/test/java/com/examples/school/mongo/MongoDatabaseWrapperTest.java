@@ -8,10 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.examples.school.Student;
+import com.examples.school.helper.MongoTestHelper;
 import com.github.fakemongo.Fongo;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 
 public class MongoDatabaseWrapperTest {
@@ -19,8 +17,8 @@ public class MongoDatabaseWrapperTest {
 	// SUT
 	private MongoDatabaseWrapper mongoDatabase;
 
-	// to add elements in the students table for testing
-	private DBCollection students;
+	// helper for testing with Mongo
+	private MongoTestHelper mongoTestHelper;
 
 	@Before
 	public void initDB() throws UnknownHostException {
@@ -28,13 +26,9 @@ public class MongoDatabaseWrapperTest {
 		// so that we don't need to install MongoDB in our computer
 		Fongo fongo = new Fongo("mongo server 1");
 		MongoClient mongoClient = fongo.getMongo();
-
-		// make sure to drop the students table for testing
-		DB db = mongoClient.getDB("school");
-		db.getCollection("student").drop();
+		mongoTestHelper = new MongoTestHelper(mongoClient);
 
 		mongoDatabase = new MongoDatabaseWrapper(mongoClient);
-		students = db.getCollection("student");
 	}
 
 	@Test
@@ -44,23 +38,23 @@ public class MongoDatabaseWrapperTest {
 
 	@Test
 	public void testGetAllStudentsNotEmpty() {
-		addStudent("1", "first");
-		addStudent("2", "second");
+		mongoTestHelper.addStudent("1", "first");
+		mongoTestHelper.addStudent("2", "second");
 
 		assertEquals(2, mongoDatabase.getAllStudentsList().size());
 	}
 
 	@Test
 	public void testFindStudentByIdNotFound() {
-		addStudent("1", "first");
+		mongoTestHelper.addStudent("1", "first");
 
 		assertNull(mongoDatabase.findStudentById("2"));
 	}
 
 	@Test
 	public void testFindStudentByIdFound() {
-		addStudent("1", "first");
-		addStudent("2", "second");
+		mongoTestHelper.addStudent("1", "first");
+		mongoTestHelper.addStudent("2", "second");
 
 		Student findStudentById = mongoDatabase.findStudentById("2");
 		assertNotNull(findStudentById);
@@ -68,10 +62,4 @@ public class MongoDatabaseWrapperTest {
 		assertEquals("second", findStudentById.getName());
 	}
 
-	private void addStudent(String id, String name) {
-		BasicDBObject document = new BasicDBObject();
-		document.put("id", id);
-		document.put("name", name);
-		students.insert(document);
-	}
 }
