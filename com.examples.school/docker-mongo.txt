@@ -1,0 +1,4 @@
+docker run -p 27017:27017 --rm mongo
+
+If you run the main Java application several times, the number of records increases,
+if the mongodb container is not restarted.

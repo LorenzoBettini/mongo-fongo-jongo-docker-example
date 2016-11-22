@@ -19,7 +19,7 @@ public abstract class AbstractMongoDatabaseWrapperTest {
 
 	private MongoDatabaseWrapper mongoDatabase;
 
-	public abstract MongoClient createMongoClient();
+	public abstract MongoClient createMongoClient() throws UnknownHostException;
 
 	private MongoTestHelper mongoTestHelper;
 
