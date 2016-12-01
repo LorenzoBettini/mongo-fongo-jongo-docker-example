@@ -29,7 +29,7 @@ public abstract class AbstractMongoDatabaseWrapperTest {
 		// so that we don't need to install MongoDB in our computer
 		MongoClient mongoClient = createMongoClient();
 		mongoTestHelper = new MongoTestHelper(mongoClient);
-	
+
 		mongoDatabase = new MongoDatabaseWrapper(mongoClient);
 	}
 
@@ -42,22 +42,28 @@ public abstract class AbstractMongoDatabaseWrapperTest {
 	public void testGetAllStudentsNotEmpty() {
 		mongoTestHelper.addStudent("1", "first");
 		mongoTestHelper.addStudent("2", "second");
-	
+
 		assertEquals(2, mongoDatabase.getAllStudentsList().size());
 	}
 
 	@Test
 	public void testFindStudentByIdNotFound() {
 		mongoTestHelper.addStudent("1", "first");
-	
+
 		assertNull(mongoDatabase.findStudentById("2"));
+	}
+
+	@Test
+	public void testStudentIsSaved() {
+		mongoDatabase.save(new Student("1", "test"));
+		assertTrue(mongoTestHelper.containsStudent("1", "test"));
 	}
 
 	@Test
 	public void testFindStudentByIdFound() {
 		mongoTestHelper.addStudent("1", "first");
 		mongoTestHelper.addStudent("2", "second");
-	
+
 		Student findStudentById = mongoDatabase.findStudentById("2");
 		assertNotNull(findStudentById);
 		assertEquals("2", findStudentById.getId());
