@@ -108,10 +108,35 @@
                 </ports>
               </run>
             </image>
+            <image>
+              <name>school-app</name>
+              <build>
+                <dockerFileDir>${project.basedir}/docker</dockerFileDir>
+                <args>
+                  <fatjar>${project.artifactId}-${project.version}-all.jar</fatjar>
+                </args>
+                <assembly>
+                  <inline>
+                    <files>
+                      <file>
+                        <source>${project.build.directory}/${project.artifactId}-${project.version}-all.jar</source>
+                      </file>
+                    </files>
+                  </inline>
+                </assembly>
+              </build>
+            </image>
           </images>
           <showLogs>true</showLogs>
         </configuration>
         <executions>
+          <execution>
+            <id>docker:build</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
           <execution>
             <id>docker:start</id>
             <phase>pre-integration-test</phase>
