@@ -39,8 +39,7 @@ public class MongoDatabaseWrapper implements Database {
 
 	@Override
 	public void save(Student student) {
-		// TODO Auto-generated method stub
-		
+		students.save(student);
 	}
 
 }
