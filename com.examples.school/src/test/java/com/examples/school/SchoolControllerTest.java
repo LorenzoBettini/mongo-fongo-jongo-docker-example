@@ -53,4 +53,26 @@ public class SchoolControllerTest {
 		verify(database).findStudentById("1");
 		assertNotNull(student);
 	}
+
+	@Test
+	public void testSaveStudentWhenStudentDoesNotAlreadyExist() {
+		Student student = new Student("1", "test");
+		students.add(student);
+		when(database.findStudentById("1")).
+			thenReturn(null);
+		assertTrue(schoolController.addStudent(student));
+		verify(database).findStudentById("1");
+		verify(database).save(student);
+	}
+
+	@Test
+	public void testSaveStudentWhenStudentAlreadyExists() {
+		Student student = new Student("1", "test");
+		students.add(student);
+		when(database.findStudentById("1")).
+			thenReturn(new Student("1", "name"));
+		assertFalse(schoolController.addStudent(student));
+		verify(database).findStudentById("1");
+		verifyNoMoreInteractions(database);
+	}
 }
