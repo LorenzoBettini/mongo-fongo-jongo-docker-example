@@ -15,4 +15,4 @@ install:
 
 script:
  - mvn -f com.examples.school/pom.xml clean verify
-
+ - mvn -f com.examples.school/pom.xml verify -Pdocker-compose
