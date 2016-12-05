@@ -125,6 +125,18 @@
                   </inline>
                 </assembly>
               </build>
+              <run>
+                <!--  check that we can run our image, linked with the MongoDB image -->
+                <links>
+                  <link>mongo:mongo-host</link>
+                </links>
+                <wait>
+                  <!-- Wait for the output "School app terminates" for 10 
+                    seconds -->
+                  <time>10000</time>
+                  <log>School-app terminates</log>
+                </wait>
+              </run>
             </image>
           </images>
           <showLogs>true</showLogs>
