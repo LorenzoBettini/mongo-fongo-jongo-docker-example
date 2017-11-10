@@ -57,7 +57,6 @@ public class SchoolControllerTest {
 	@Test
 	public void testSaveStudentWhenStudentDoesNotAlreadyExist() {
 		Student student = new Student("1", "test");
-		students.add(student);
 		when(database.findStudentById("1")).
 			thenReturn(null);
 		assertTrue(schoolController.addStudent(student));
@@ -68,7 +67,6 @@ public class SchoolControllerTest {
 	@Test
 	public void testSaveStudentWhenStudentAlreadyExists() {
 		Student student = new Student("1", "test");
-		students.add(student);
 		when(database.findStudentById("1")).
 			thenReturn(new Student("1", "name"));
 		assertFalse(schoolController.addStudent(student));
