@@ -24,10 +24,5 @@ install:
  - docker pull mongo
 
 script:
- - mvn -f com.examples.school/pom.xml \
-     org.jacoco:jacoco-maven-plugin:prepare-agent \
-     test \
-     org.jacoco:jacoco-maven-plugin:prepare-agent-integration \
-     verify \
-     sonar:sonar
+ - mvn -f com.examples.school/pom.xml org.jacoco:jacoco-maven-plugin:prepare-agent test org.jacoco:jacoco-maven-plugin:prepare-agent-integration verify sonar:sonar
 
