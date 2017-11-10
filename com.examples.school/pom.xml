@@ -16,6 +16,7 @@
     <mongo.driver.version>2.14.3</mongo.driver.version>
     <docker.maven.plugin.version>0.23.0</docker.maven.plugin.version>
     <sonar.junit.reportPaths>${project.build.directory}/surefire-reports,${project.build.directory}/failsafe-reports</sonar.junit.reportPaths>
+    <sonar.coverage.exclusions>**/Main.*</sonar.coverage.exclusions>
   </properties>
 
   <dependencies>
@@ -62,6 +63,20 @@
   </dependencies>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.7.9</version>
+          <configuration>
+            <excludes>
+              <exclude>**/Main.*</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
