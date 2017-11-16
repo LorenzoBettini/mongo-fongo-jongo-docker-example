@@ -209,5 +209,58 @@
         </plugins>
       </build>
     </profile>
+
+    <profile>
+      <!-- This assumes that the Docker image for our app has already been 
+        built. That is, the standard profile has already been executed. -->
+      <id>docker-compose</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <skipTests>true</skipTests>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>${docker.maven.plugin.version}</version>
+            <configuration>
+              <images>
+                <image>
+                  <alias>app</alias>
+                  <external>
+                    <type>compose</type>
+                    <basedir>.</basedir>
+                  </external>
+                  <run>
+                    <wait>
+                      <!-- Wait for the output "School app terminates" for 
+                        10 seconds -->
+                      <time>10000</time>
+                      <log>School-app terminates</log>
+                    </wait>
+                  </run>
+                </image>
+              </images>
+              <showLogs>true</showLogs>
+            </configuration>
+            <executions>
+              <execution>
+                <id>docker:start</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>start</goal>
+                  <!-- Stop the container(s) even if the wait condition failed. 
+                    Otherwise the background servers will be still running. -->
+                  <goal>stop</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 </project>
