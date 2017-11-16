@@ -3,16 +3,26 @@ language: java
 jdk:
   - oraclejdk8
 
+addons:
+  sonarcloud:
+    branches:
+      - master
+      - sonarcloud
+    organization: "lorenzobettini-github"
+    token:
+      secure: "lcqV5h2HGwIroc1KtspBs4nV7g/0QqrqQaDnyA7QpXUx3YoJi9lHoJcvKTnMvd0qgU5kOEFH5ueNIHqxNhAi/YVbGlXIgCJ8WMfVCoPPTlX7imr7aUwKDn85P6NUzmIp4bzLrMB1XYsaEE3pRGHZp0BKGlwBI8xKvG4P6RcuCQgRcKDNx21ITli114mxuVFOEsyK0MScmTv0ug3BGB5yQtlxmJahZW3kksOgde9OuxVOrIZBtjK2cXZT5Rq8OOHHsmab2bwqhaFyBX1onFy7kdAc5ediyLK6wTu405tE2isJJHSAtLpeW4Vn0pYRqoymp5ql6iYZhYhpA6eA+sa14G/GNZPgTNitAlvo8ovhY1Iefl60u/FnQ5ojVkmeY0+Od7Htsphbgykx3AR2Woz9J5s7edPeRuUwxLetbVKRSHIsl+Bl3T+bvllJ8CA0Vx695cFKMEyx6EMPBM3r6ZwixWVFm9ClzzZvO5v8fNW7vHS7puByk6lNLOuqf2deDi/VwI9Hsh9k9B89jeqvWp1uWoAGanDptZtBtScNCPC1Y1Xt3OKGv8rE8SdOT8i6CnS1YtpTVahSiiyl3Rxn5pzTXjU2o/60YpZVnXzI6rDKLa3yxz9bJk7WwFs2VzlCd2mQrX0nwNHAXlHtnIlobXTQI1uaiys8l869N/szANgoRRQ="
+
 services:
   - docker
 
 cache:
   directories:
-  - $HOME/.m2
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
 
 install:
  - docker pull mongo
 
 script:
- - mvn -f com.examples.school/pom.xml clean verify
+ - mvn -f com.examples.school/pom.xml jacoco:prepare-agent test jacoco:prepare-agent-integration verify jacoco:report jacoco:report-integration sonar:sonar coveralls:report
  - mvn -f com.examples.school/pom.xml verify -Pdocker-compose

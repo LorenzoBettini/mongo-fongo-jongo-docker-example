@@ -1,6 +1,5 @@
 package com.examples.school.mongo;
 
-import java.net.UnknownHostException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -17,7 +16,7 @@ public class MongoDatabaseWrapper implements Database {
 
 	private MongoCollection students;
 
-	public MongoDatabaseWrapper(MongoClient mc) throws UnknownHostException {
+	public MongoDatabaseWrapper(MongoClient mc) {
 		DB db = mc.getDB("school");
 
 		Jongo jongo = new Jongo(db);
