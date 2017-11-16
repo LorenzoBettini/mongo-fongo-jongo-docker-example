@@ -25,4 +25,4 @@ install:
 
 script:
  - mvn -f com.examples.school/pom.xml jacoco:prepare-agent test jacoco:prepare-agent-integration verify jacoco:report jacoco:report-integration sonar:sonar coveralls:report
-
+ - mvn -f com.examples.school/pom.xml verify -Pdocker-compose
